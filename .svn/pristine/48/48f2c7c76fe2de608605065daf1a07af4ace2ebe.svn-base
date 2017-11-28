@@ -1,0 +1,32 @@
+package com.mp.service;
+
+import com.mp.bean.User;
+import com.mp.bean.Video;
+
+public interface ProjectService {
+     
+	/**
+	 * 通过名字查询视频信息
+	 * @param name
+	 * @return
+	 */
+	Video getVideoByName(String name);
+	/**
+	 * 判断用户是会否存在
+	 * @param email
+	 * @return
+	 */
+	boolean userExit(String email);
+	/**
+	 * 设置vip
+	 * @param user
+	 */
+	void setVip(User user);
+	
+	User getUserByUuid(String uuid);
+
+		
+	
+		
+	
+}

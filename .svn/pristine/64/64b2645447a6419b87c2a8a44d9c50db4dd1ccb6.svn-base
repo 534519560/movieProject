@@ -1,0 +1,7 @@
+package com.mp.tools;
+
+public enum Type {
+	
+		科幻,恐怖,言情,其他
+	
+}

@@ -1,0 +1,119 @@
+package com.mp.serviceImpl;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mp.bean.User;
+import com.mp.bean.Video;
+import com.mp.bean.VideoBarrage;
+import com.mp.service.ProjectService;
+import com.mp.tools.JDBCUtils;
+@Service
+public class ProjectServiceImpl implements ProjectService {
+
+	JDBCUtils jdbc=JDBCUtils.getJDBC();
+	ArrayList<Object> params=new ArrayList<Object>();
+
+	
+	public Video getVideoByName(String name) {
+		// TODO 自动生成的方法存根
+	params.clear();
+		params.add(name+"%");
+		try {
+			Video video=jdbc.findSimpleRefResult("select * from videoinfo where name like ?", params, Video.class);
+	
+			return video;
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	public boolean userExit(String email) {
+		// TODO 自动生成的方法存根
+		params.clear();
+		params.add(email);
+		try {
+			User user=jdbc.findSimpleRefResult("select * from userinfo where emial = ?", params, User.class);
+		  if(user!=null) return true;
+			
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public void setVip(User user) {
+		// TODO 自动生成的方法存根
+		params.clear();
+		params.add(user.getUuid());
+		try {
+			jdbc.updateByPreparedStatement("update userinfo set identity = 1 where uuid=?", params);
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		
+	}
+
+	public User getUserByUuid(String uuid) {
+		// TODO 自动生成的方法存根
+		params.clear();
+		params.add(uuid);
+		User user = null;
+		try {
+			 user = jdbc.findSimpleRefResult("select * from userInfo where uuid=?", params, User.class);
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+	
+		return user;
+	}
+
+
+	public ArrayList<String> getDanmu(String uuid) {
+		// TODO 自动生成的方法存根
+		ArrayList<String> list = null;
+		try {
+			list = jdbc.exeDanmu("select * from videobarrage where videouuid=?",uuid);
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+
+	public void insertDanmu(VideoBarrage vb) {
+		
+		// TODO 自动生成的方法存根
+		params.clear();
+		params.add(vb.getVideouuid());
+		params.add(vb.getBarrage());
+		params.add(vb.getUseruuid());
+		params.add(vb.getTime());
+		try {
+			jdbc.updateByPreparedStatement("insert into videobarrage values(?,?,?,?)", params);
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+
+	
+	
+
+
+}

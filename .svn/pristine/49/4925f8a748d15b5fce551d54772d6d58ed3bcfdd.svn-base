@@ -1,0 +1,52 @@
+package com.mp.serviceImpl;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mp.bean.User;
+import com.mp.bean.Video;
+import com.mp.service.ProjectService;
+import com.mp.tools.JDBCUtils;
+@Service
+public class ProjectServiceImpl implements ProjectService {
+
+	JDBCUtils jdbc=JDBCUtils.getJDBC();
+
+	@Override
+	public Video getVideoByName(String name) {
+		// TODO 自动生成的方法存根
+		ArrayList<Object> params=new ArrayList<Object>();
+		params.add(name+"%");
+		try {
+			Video video=jdbc.findSimpleRefResult("select * from videoinfo where name like ?", params, Video.class);
+			System.out.println(video.toString());
+			return video;
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean userExit(String email) {
+		// TODO 自动生成的方法存根
+		ArrayList<Object> params=new ArrayList<Object>();
+		params.add(email);
+		try {
+			User user=jdbc.findSimpleRefResult("select * from userinfo where emial = ?", params, User.class);
+		  if(user!=null) return true;
+			
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+
+
+}

@@ -1,0 +1,121 @@
+package com.mp.tools;
+
+import java.io.File;  
+import java.util.HashMap;  
+import java.util.Iterator;  
+import java.util.List;  
+import java.util.Map;  
+import java.util.UUID;
+  
+import javax.servlet.http.HttpServletRequest;  
+import javax.servlet.http.HttpServletResponse;
+  
+import org.apache.commons.fileupload.FileItem;  
+import org.apache.commons.fileupload.ProgressListener;  
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;  
+import org.apache.commons.fileupload.servlet.ServletFileUpload;  
+
+
+
+
+  
+public class FileUploadUtil {  
+  
+    /** 
+     * 文件上传保存路径 
+     */  
+    private static final String SAVE_FILEPATH = "/video/";  
+    /** 
+     * 文件上传临时保存路径 
+     */  
+    private static final String SAVE_FILE_TMPPATH = "/video/tmp/";  
+    /** 
+     * 上传文件的最大值M 
+     */  
+    private static final int MAX_FILE_SIZE = 100*1024*1024;  
+    /** 
+     * 文件数据在内存中超过多少M后，就写入临时文件 
+     */  
+    private static final int THRESHOLD_SIZE = 2*1024*1024;  
+      
+    private static final String ENCODING = "UTF-8";  
+   
+    /** 
+     * 处理文件上传的表单 
+     * 下载文件，并返回文件名称及普通表单域中其它属性值 
+     * 获取文件名 
+     */  
+    public static void upload(HttpServletRequest request)throws Exception{  
+        Map<String,String> params = new HashMap<String, String>();  
+        
+        String savePath = request.getSession().getServletContext()  
+                .getRealPath(SAVE_FILEPATH)+ File.separator;  
+        String savePathTemp = request.getSession().getServletContext()  
+                .getRealPath(SAVE_FILE_TMPPATH)+ File.separator;  
+          
+        File saveFileTempDir = new File(savePathTemp);  
+          
+        DiskFileItemFactory factory = new DiskFileItemFactory();  
+        //当内存中文件数据达到THRESHOLD_SIZE后，就写入临时文件中，避免上传大文件时，消化太多内存  
+        factory.setSizeThreshold(THRESHOLD_SIZE);  
+        factory.setRepository(saveFileTempDir);  
+          
+        ServletFileUpload upload = new ServletFileUpload(factory);  
+        upload.setHeaderEncoding(ENCODING);  
+        upload.setSizeMax(MAX_FILE_SIZE);  
+          
+        FileUploadInfo fileUploadInfo = new FileUploadInfo();  
+       
+        upload.setProgressListener(new FileUploadListener(fileUploadInfo));
+       
+        request.getSession().setAttribute("uploadInfo", fileUploadInfo);  
+       
+        List items = upload.parseRequest(request);  
+        Iterator iter = items.iterator();  
+      
+        int fileNum = 1;  
+        while(iter.hasNext()){  
+            FileItem item = (FileItem) iter.next();
+            if (item.isFormField()) {//普通表单域  
+                params.put(item.getFieldName(), item.getString());  
+            } else {  
+               String fileName = item.getName().replace("/", "\\");  
+                int i = fileName.lastIndexOf("\\");  
+                fileName = fileName.substring(i+1);  
+                //避免重复  
+                String randomUUID = UUID.randomUUID().toString();
+                fileName = randomUUID + fileName;  
+                TempData.uuidfromsave=randomUUID;
+                TempData.filename=fileName;
+                File uploadedFile = new File(savePath + fileName);  
+                TempData.filepath=uploadedFile;
+                System.out.println(TempData.filepath);
+                item.write(uploadedFile);  
+                  
+                params.put("fileName0"+fileNum, fileName);  
+                fileNum ++;  
+                
+            }  
+        }  
+          
+          
+         
+    }  
+      
+}  
+  
+class FileUploadListener implements ProgressListener{  
+  
+    FileUploadInfo fileUploadInfo = null;  
+      
+    public FileUploadListener(FileUploadInfo fileUploadInfo) {  
+        this.fileUploadInfo = fileUploadInfo;  
+    }  
+      
+    public void update(long uploadSize, long totalSize, int itemNum) {  
+        this.fileUploadInfo.setTotalSize(totalSize);  
+        this.fileUploadInfo.setUploadSize(uploadSize);  
+       
+    }  
+      
+}  

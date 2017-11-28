@@ -1,0 +1,45 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'Register.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" type="text/css" href="css/register.css">
+	<script type="text/javascript">
+	function rgi(){
+	var a = document.getElementById("T1").value;
+	var emailreg = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
+	if(emailreg.test(a)){
+		alert("注册成功");
+		document.getElementById("f1").submit();
+	}else{
+		alert("邮箱错误");
+		return;
+	}
+}
+	</script>
+  </head>
+  
+  <body>
+  <form action="/MovieProject/reg" method="post" id="f1">
+    <div>
+  	 	邮&nbsp;&nbsp;&nbsp;箱：<input type="text" id="T1" name="email"/><br />
+		密&nbsp;&nbsp;&nbsp;码：<input type="password" id="T2" name="password"/><br />
+		用户昵称：<input type="text" id="T3" name="nickname"/><br />
+		<a><input type="button" value="注册" align="center" id="B1" onclick="rgi()" ></a>
+    </div>
+   </form>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+@charset "UTF-8";
+#guidehead{
+	position:absolute;
+right:100px; 
+top:-1px;
+
+}
+.input-group{
+	width:300px;
+	margin-bottom: 50px;
+	margin: auto;
+}
+#danmup{
+	margin: auto;
+}
+#top_textarea{
+	    width: 100%;
+
+    border: 0;
+    outline: none;
+    resize: none;
+    display: inline-block;
+    font-size: 12px;
+}

@@ -1,0 +1,10 @@
+package com.mp.tools;
+
+import java.io.File;
+import java.util.UUID;
+
+public class TempData {
+	public static File filepath;
+	public static String uuidfromsave;
+    public static String filename;
+}

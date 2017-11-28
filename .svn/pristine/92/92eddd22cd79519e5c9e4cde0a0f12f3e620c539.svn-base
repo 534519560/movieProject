@@ -1,0 +1,182 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+  <head>
+    <base href="<%=basePath%>">    
+    <title>标题</title>        
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">    
+  <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+  <meta http-equiv="description" content="This is my page">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		
+	
+		
+			
+			 <link href="http://vjs.zencdn.net/5.8.8/video-js.css" rel="stylesheet">
+			 <script src="http://vjs.zencdn.net/5.8.8/video.js"></script>
+ <link rel="stylesheet" type="text/css" href="css/video/danmuplayer.css">
+			<script src="js/video/danmuplayer.js"></script>
+			 <link rel="stylesheet" type="text/css" href="css/video/videostyle.css">
+			 		<script src="js/video/videofunction.js"></script>
+		  
+
+		
+	
+	
+
+ </head>
+ <body>
+ 
+
+  
+ 
+   <div class="input-group"  >
+                    <input type="text" class="form-control" style="background-color: transparent;">
+                    <span class="input-group-btn " >
+                        <button class="btn btn-default" type="button">搜索</button>
+                    </span>
+                </div>
+                <div id="guidehead">
+		   <span><a id="upload" class="btn btn-link" href="uploadVideo">上传</a> <a id="register" class="btn btn-link" href="Register.jsp">注册</a><a id="login" class="btn btn-link" href="Login.jsp">登陆</a><a id="vip" class="btn btn-link" href="pay">成为vip</a><img style="width:50px;height:50px;" class="img-circle" src="${user.picture }"/></span>	
+			</div>
+<div id="danmup">
+
+</div> 
+<div style="margin:35px;"> <h1 style="font-size: 30px">${video.name} 视频简介 </h1>
+<p> ${video.introduction }</p>
+</div>
+
+<div style="margin:35px;" id="commentdiv">
+<h1 style="font-size: 30px">视频评论</h1>
+<textarea tabindex="1" autocomplete="off"
+ name="content" accesskey="u" 
+ id="top_textarea" style="height: 60px; padding: 10px;">
+
+ </textarea>
+</div>
+	<div class="commtSub np-reply-box-footer"
+		style="position: relative; display: block; height: 40px"
+		id="p_login_btn">
+
+
+		<div class="np-login" id="loginFlag" style="display: block;">
+
+			<img width="35" height="35" class="np-avatar" src="#"> <span
+				class="hyw"> <em class="np-user">${user.name }</em>
+				&nbsp;&nbsp;&nbsp;
+				 <a href="#"
+				class="np-btn np-btn-submit" id="top_post_btn" hidefocus="true">发表评论</a>
+			</span>
+		</div>
+
+	</div>
+	<ul style="list-style: none;" id="commentlist">
+	
+	</ul>
+</body>
+
+
+ <script type="text/javascript">
+		$("#danmup").DanmuPlayer({
+			src : "videosource/${video.uuid}${video.name}.MP4", //视频源 
+		
+			height : "480px", //区域的高度 
+			width : "800px", //区域的宽度 
+		 urlToGetDanmu:"danmuGet/${video.uuid}",     //从后端获取弹幕数据 
+		 urlToPostDanmu:"danmuPost/${video.uuid}"  //发送弹幕数据给后端保存入库 
+		 
+
+		});
+		/* $("#danmup .danmu-div").danmu("addDanmu", [ {
+			"text" : "这是滚动弹幕",
+			color : "white",
+			size : 1,
+			position : 0,
+			time : 2
+		}, {
+			"text" : "我是帽子绿",
+			color : "green",
+			size : 1,
+			position : 0,
+			time : 3
+		}, {
+			"text" : "哈哈哈啊哈",
+			color : "black",
+			size : 1,
+			position : 0,
+			time : 10
+		}, {
+			"text" : "这是顶部弹幕",
+			color : "yellow",
+			size : 1,
+			position : 1,
+			time : 3
+		}, {
+			"text" : "这是底部弹幕",
+			color : "red",
+			size : 1,
+			position : 2,
+			time : 9
+		}, {
+			"text" : "大家好，我是伊藤橙",
+			color : "orange",
+			size : 1,
+			position : 1,
+			time : 3
+		}
+
+		]) */
+		
+		
+
+	</script>
+ <c:if test="${empty user }">
+ <script type="text/javascript">
+
+  $("#commentdiv").hide();
+ $(".opt-btn.ctrl-btn ").hide();
+ $(".commtSub.np-reply-box-footer").hide();
+ $(".danmu-input.ctrl-btn").hide(); 
+ $(".send-btn.ctrl-btn").hide();
+ $("#vip").hide();
+ $("#upload").hide();
+
+
+ </script>
+ </c:if>
+ <c:if test="${!empty user }">
+<script type="text/javascript">
+$("#upload").show();
+$("#register").hide();
+$("#login").text("退出");
+$("#login").attr("href","loginOut"); 
+$("#vip").show();
+
+</script>
+</c:if>
+ <c:if test="${user.identity ne 1 }">
+ <script type="text/javascript">
+ $(".opt-btn.ctrl-btn ").hide(); 
+
+
+ </script>
+ </c:if>
+ <c:if test="${user.identity eq 1}">
+<script type="text/javascript">
+$("#vip").text("VIP");
+$("#vip").css({"href":"#","color":"red"});
+</script>
+
+</c:if>
+</html>

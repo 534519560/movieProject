@@ -1,0 +1,98 @@
+package com.mp.controller;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.mp.bean.comment;
+import com.mp.tools.commentDao;
+import com.mp.tools.word;
+import com.mysql.fabric.xmlrpc.base.Data;
+
+
+
+@WebServlet("/comment")
+public class commentServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private commentDao dao = new commentDao();
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		req.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html;charset=UTF-8");
+		String pt = req.getParameter("cmd")==null?"":req.getParameter("cmd");
+		String videouuid = req.getParameter("videouuid");
+		
+			try {
+				if(pt.equals("add")){
+					add(req, resp);
+					pt="all";
+				}else if(pt.equals("del")){
+					del(req, resp);
+					pt="own";
+					queryOwn(req, resp);
+				}else if(pt.equals("own")){
+					queryOwn(req, resp);
+				}
+				if(!pt.equals("own")){
+					List<comment> list1 = dao.comments(videouuid);
+					req.setAttribute("all", list1);
+				}
+				List<comment> list = dao.comments(videouuid);
+				req.setAttribute("num", list.size());
+				req.setAttribute("cmd", pt);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+			req.getRequestDispatcher("/jsp/comment.jsp").forward(req, resp);	
+	}
+	//添加
+	protected void add(HttpServletRequest req, HttpServletResponse resp)
+			throws Exception {
+		// TODO Auto-generated method stub
+		String useruuid = req.getParameter("useruuid");
+		String videouuid = req.getParameter("videouuid");
+		String comment = req.getParameter("content");
+		String a = word.strword(comment);
+		
+		comment com = new comment();
+		com.setVideouuid(videouuid);
+		com.setComment(a);
+		com.setUseruuid(useruuid);
+		com.setTime(new Date(System.currentTimeMillis()).toLocaleString());
+		dao.addCom(com);
+
+	}
+	//删除
+	protected void del(HttpServletRequest req, HttpServletResponse resp)
+			throws NumberFormatException, Exception {
+		// TODO Auto-generated method stub
+		String id = req.getParameter("id");
+		dao.delete(Long.valueOf(id));
+	}
+	//查询个人
+	protected void queryOwn(HttpServletRequest req, HttpServletResponse resp)
+			throws Exception {
+		// TODO Auto-generated method stub
+		String useruuid = req.getParameter("useruuid");
+		String videouuid = req.getParameter("videouuid");
+		List<comment> list = dao.comment(useruuid,videouuid);
+		req.setAttribute("own", list);
+	}
+
+}

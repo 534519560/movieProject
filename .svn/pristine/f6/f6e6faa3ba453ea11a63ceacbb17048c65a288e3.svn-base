@@ -1,0 +1,57 @@
+package com.mp.bean;
+
+public class User {
+    
+	private String uuid;
+	private String email;
+	private String password;
+	private int indentity;
+	private String name;
+	private String picture;
+	public User(String uuid2, String email2, String password2, int i,
+			String name2, Object object) {
+		// TODO Auto-generated constructor stub
+	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public int getIndentity() {
+		return indentity;
+	}
+	public void setIndentity(int indentity) {
+		this.indentity = indentity;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+
+}

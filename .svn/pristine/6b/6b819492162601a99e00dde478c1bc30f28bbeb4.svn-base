@@ -1,0 +1,50 @@
+package com.mp.service;
+
+import java.util.ArrayList;
+
+import com.mp.bean.User;
+import com.mp.bean.Video;
+import com.mp.bean.VideoBarrage;
+
+public interface ProjectService {
+     
+	/**
+	 * 通过名字查询视频信息
+	 * @param name
+	 * @return
+	 */
+	Video getVideoByName(String name);
+	/**
+	 * 判断用户是否存在
+	 * @param email
+	 * @return
+	 */
+	boolean userExit(String email);
+	/**
+	 * 设置vip
+	 * @param user
+	 */
+	void setVip(User user);
+	/**
+	 * 获取用户
+	 * @param uuid
+	 * @return
+	 */
+	User getUserByUuid(String uuid);
+	/**
+	 * 加载弹幕
+	 * @param uuid
+	 * @return
+	 */
+	ArrayList<String> getDanmu(String uuid);
+	/**
+	 * 保存弹幕
+	 * @param danmu
+	 */
+	void insertDanmu(VideoBarrage vb);
+
+		
+	
+		
+	
+}

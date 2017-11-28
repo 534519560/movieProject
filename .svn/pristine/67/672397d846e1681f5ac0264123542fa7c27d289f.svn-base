@@ -1,0 +1,14 @@
+package com.mp.service;
+
+import com.mp.bean.Video;
+
+public interface ProjectService {
+     
+	/**
+	 * 通过名字查询视频信息
+	 * @param name
+	 * @return
+	 */
+	Video getVideoByName(String name);
+	boolean userExit(String email);
+}

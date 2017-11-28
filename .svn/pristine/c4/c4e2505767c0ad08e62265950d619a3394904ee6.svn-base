@@ -1,0 +1,38 @@
+package com.mp.bean;
+
+public class VideoBarrage {
+	private  String videouuid;
+	private  String barrage;
+	private  String useruuid;
+	private  String time;
+	public String getVideouuid() {
+		return videouuid;
+	}
+	public void setVideouuid(String videouuid) {
+		this.videouuid = videouuid;
+	}
+	public String getBarrage() {
+		return barrage;
+	}
+	@Override
+	public String toString() {
+		return "VideoBarrage [videouuid=" + videouuid + ", barrage=" + barrage + ", useruuid=" + useruuid + ", time="
+				+ time + "]";
+	}
+	public void setBarrage(String barrage) {
+		this.barrage = barrage;
+	}
+	public String getUseruuid() {
+		return useruuid;
+	}
+	public void setUseruuid(String useruuid) {
+		this.useruuid = useruuid;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+}
